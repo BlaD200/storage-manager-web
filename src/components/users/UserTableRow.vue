@@ -15,7 +15,7 @@
                 <button
                         :disabled="!deleteUserPermission"
                         :title="!deleteUserPermission ?
-                                    'You haven\'t rights to delete users' : 'Delete user'"
+                                    'You haven\'t rights to delete users or you cannot delete yourself' : 'Delete user'"
                         @click="$emit('show-delete-popup', user.id, user.username)"
                         class="btn btn-outline-danger"
                         id="delete-user-btn"
@@ -56,7 +56,8 @@
         props: ['user'],
         computed: {
             deleteUserPermission() {
-                return this.$root.currentUser.userAuthorities.includes('DELETE_USER')
+                return this.$root.currentUser.userAuthorities.includes('DELETE_USER') &&
+                    this.$root.currentUser.id !== this.user.id
             },
             editUserPermission() {
                 return this.$root.currentUser.userAuthorities.includes('UPDATE_USER')
