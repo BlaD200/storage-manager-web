@@ -11,7 +11,8 @@
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         <td>
-            <span class="col-3">
+            <div class="row justify-content-center">
+                <span class="col-3">
                 <button
                         :disabled="!deleteUserPermission"
                         :title="!deleteUserPermission ?
@@ -46,6 +47,8 @@
                     </svg>
                 </button>
             </span>
+            </div>
+
         </td>
     </tr>
 </template>

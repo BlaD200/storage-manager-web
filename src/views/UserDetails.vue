@@ -85,20 +85,20 @@
                 this.$root.currentUser.userAuthorities.forEach((authority, index) => {
                     this.authorities.push({name: authority, isUserHave: false, index: index, isActive: false})
                 })
-                response.data.authorities.forEach(authorityName => {
-                    let authority = this.authorities.find((value) => {
-                        return value.name === authorityName;
+                response.data.authorities.forEach(authority => {
+                    let authorityRowVal = this.authorities.find((value) => {
+                        return value.name === authority.name;
                     })
-                    if (!authority) {
+                    if (!authorityRowVal) {
                         this.authorities.push({
-                            name: authorityName,
+                            name: authorityRowVal,
                             isUserHave: true,
                             index: this.authorities.length,
                             isActive: true
                         })
                     } else {
-                        authority.isUserHave = true
-                        authority.isActive = true
+                        authorityRowVal.isUserHave = true
+                        authorityRowVal.isActive = true
                     }
                 })
             }).catch(() => this.loading = false)

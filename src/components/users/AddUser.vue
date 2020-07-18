@@ -77,7 +77,7 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="float-right mt-2 mt-sm-2 mt-md-1 mx-sm-0 mx-md-1">
                         <b-button
-                                :disabled="!createUserAuthority"
+                                :disabled="!createUserAuthority || !isChanged"
                                 :title="createUserAuthority ?
                                     'Create new user' : ''" class="mx-2"
                                 type="submit" v-b-tooltip.hover.bottom variant="success">Add user
