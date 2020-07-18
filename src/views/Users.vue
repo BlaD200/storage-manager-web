@@ -10,6 +10,7 @@
 
             <tableHeader
                     :size-per-page-options="sizePerPageOptions"
+                    v-on:search-button-clicked="searchUsers"
                     v-on:on-size-per-page-changed="onSizePerPageChanged"
             />
 
@@ -100,17 +101,34 @@
             this.getUsersPage(0)
         },
         methods: {
-            getUsersPage(page) {
+            getUsersPage(page, searchInput) {
+                let config
+                if (searchInput)
+                    config = {
+                        'params':
+                            {
+                                'page': page,
+                                'size': this.sizePerPage,
+                                'username': searchInput,
+                                'name': searchInput,
+                                'email': searchInput
+                            }
+                    }
+                else
+                    config = {
+                        'params':
+                            {'page': page, 'size': this.sizePerPage}
+                    }
+
                 this.loading = true
                 this.$http
-                    .get(this.apiURL, {'params': {'page': page, 'size': this.sizePerPage}})
+                    .get(this.apiURL, config)
                     .then(response => {
                         this.loading = false
 
                         this.users = []
                         response.data.content.forEach(user => this.users.push(user))
                         this.totalElements = response.data.totalElements
-                        // this.currentPageNumber = response.data.currentPageNumber + 1
                     })
                     .catch(error => {
                         this.loading = false
@@ -219,6 +237,10 @@
             onSizePerPageChanged(newSize) {
                 this.sizePerPage = newSize
                 this.getUsersPage(this.currentPageNumber - 1)
+            },
+            searchUsers(searchInput) {
+                console.log(searchInput)
+                this.getUsersPage(this.currentPageNumber - 1, searchInput)
             }
         },
         computed: {

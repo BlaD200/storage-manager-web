@@ -11,12 +11,20 @@
         </div>
 
         <div class="col-9 col-lg-5">
-            <div class="float-right input-group">
-                <input aria-label="Search"
-                       class="form-control mr-2" id="input-user-search" placeholder="Name, username or email..."
-                       type="search">
-                <button class="btn btn-outline-success my-0" type="submit">Search</button>
-            </div>
+            <b-form
+                    @submit.prevent="$emit('search-button-clicked', searchInput)"
+                    class="float-right input-group">
+                <input
+                        aria-label="Search"
+                        class="form-control mr-2"
+                        id="input-user-search" placeholder="Name, username or email..." type="search"
+                        v-model="searchInput">
+                <button
+                        class="btn btn-outline-success my-0"
+                        type="submit"
+                >Search
+                </button>
+            </b-form>
         </div>
     </div>
 </template>
@@ -29,7 +37,8 @@
         ],
         data() {
             return {
-                sizePerPage: 5
+                sizePerPage: 5,
+                searchInput: ''
             }
         }
     }
