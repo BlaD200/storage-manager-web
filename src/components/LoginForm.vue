@@ -73,7 +73,12 @@
                     let authorizationToken = 'Barrier ' + response.headers['authorization']
                     localStorage.setItem("authorizationToken", authorizationToken)
 
+                    let userAuthorities = []
                     this.$root.currentUser = response.data
+                    response.data.userAuthorities.forEach(authority => {
+                        userAuthorities.push(authority.name)
+                    })
+                    this.$root.currentUser.userAuthorities = userAuthorities
                     localStorage.setItem("currentUser", JSON.stringify(this.$root.currentUser))
 
                     this.$root.messageBoxOk("Updated", "Successful login!")
