@@ -11,7 +11,7 @@
                 <tr class="d-flex">
                     <th @click="sortByIndex"
                         class="thead-clickable col-2 col-sm-2"
-                        scope="col">#
+                        scope="col">ID
                     </th>
                     <th @click="sortByAuthorityName"
                         class="thead-clickable col-7 col-sm-7"
@@ -29,7 +29,7 @@
                 <tbody class="table-hover">
                 <authorityRow
                         :authority="authority"
-                        :key="authority.index"
+                        :key="authority.id"
                         v-for="authority in sortedAuthorities"
                         v-on:authority-changed="authorityChanged"
                 ></authorityRow>
@@ -70,6 +70,7 @@
         data() {
             return {
                 apiURL: this.$root.apiURL + 'users/' + this.$route.params.id + '/authorities',
+                authoritiesApiURL: this.$root.apiURL + 'authorities',
                 userID: this.$route.params.id,
                 authorities: [],
                 loading: true,
@@ -79,28 +80,31 @@
             }
         },
         created() {
-            // TODO receive all authorities
-            this.$http.get(this.apiURL).then(response => {
-                this.loading = false;
-                this.$root.currentUser.userAuthorities.forEach((authority, index) => {
-                    this.authorities.push({name: authority, isUserHave: false, index: index, isActive: false})
+            this.$http.get(this.authoritiesApiURL).then(response => {
+                response.data.authorities.forEach(authority => {
+                    this.authorities.push({
+                        name: authority.name,
+                        isUserHave: false,
+                        id: authority.authority_id,
+                        isActive: false
+                    })
                 })
+            })
+            this.$http.get(this.apiURL).then(response => {
                 response.data.authorities.forEach(authority => {
                     let authorityRowVal = this.authorities.find((value) => {
-                        return value.name === authority.name;
+                        return value.id === authority.authority_id;
                     })
                     if (!authorityRowVal) {
-                        this.authorities.push({
-                            name: authorityRowVal,
-                            isUserHave: true,
-                            index: this.authorities.length,
-                            isActive: true
-                        })
+                        console.log("Unexpected authority: " + authority.name)
+                        console.log(authority)
                     } else {
                         authorityRowVal.isUserHave = true
                         authorityRowVal.isActive = true
                     }
                 })
+
+                this.loading = false;
             }).catch(() => this.loading = false)
         },
         methods: {
@@ -138,7 +142,6 @@
             },
             resetAuthorities() {
                 this.isChanged = false
-                console.log("HERE")
                 this.authorities.forEach(authority => {
                     authority.isActive = authority.isUserHave
                 })
@@ -147,13 +150,18 @@
                 let authorities = []
                 this.authorities.forEach(authority => {
                     if (authority.isActive)
-                        authorities.push(authority.name)
+                        authorities.push({'authority_id': authority.id, 'name': authority.name})
                 })
                 this.$http.post(this.apiURL, {"authorities": authorities}).then(() => {
                     this.$router.go(0)
                     if (this.$route.params.id === this.$root.currentUser.id) {
-                        this.$root.currentUser.userAuthorities = authorities
-                        localStorage.setItem('currentUser', this.$root.currentUser)
+                        let userAuthorities = []
+                        authorities.forEach(authority => {
+                            userAuthorities.push(authority.name)
+                        })
+                        console.log(userAuthorities)
+                        this.$root.currentUser.userAuthorities = userAuthorities
+                        localStorage.setItem('currentUser', JSON.stringify(this.$root.currentUser))
                     }
                 }).catch(error => {
                     let title = 'Error while saving authorities'

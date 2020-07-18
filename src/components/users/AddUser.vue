@@ -1,10 +1,10 @@
 <template>
     <div>
         <b-form
+                v-b-tooltip.hover.bottom
                 :title="!createUserAuthority ?
                                     'You haven\'t rights to add new user' : ''" @reset="onReset"
                 @submit.prevent="onSubmit"
-                v-b-tooltip.hover.bottom
                 v-if="show">
 
             <div class="row justify-content-center">
