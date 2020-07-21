@@ -18,6 +18,7 @@
                         aria-label="Search"
                         class="form-control mr-2"
                         :placeholder="searchPlaceholderText" id="input-user-search" type="search"
+                        @change="inputChanged"
                         v-model="searchInput">
                 <button
                         class="btn btn-outline-success my-0"
@@ -54,6 +55,13 @@
             return {
                 sizePerPage: 5,
                 searchInput: ''
+            }
+        },
+        methods: {
+            inputChanged() {
+                console.log(this.searchInput)
+                if (this.searchInput.length === 0)
+                    this.$emit('input-cleared')
             }
         }
     }
