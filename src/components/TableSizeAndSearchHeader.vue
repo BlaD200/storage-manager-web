@@ -17,7 +17,7 @@
                 <input
                         aria-label="Search"
                         class="form-control mr-2"
-                        id="input-user-search" placeholder="Name, username or email..." type="search"
+                        :placeholder="searchPlaceholderText" id="input-user-search" type="search"
                         v-model="searchInput">
                 <button
                         class="btn btn-outline-success my-0"
@@ -32,9 +32,24 @@
 <script>
     export default {
         name: "TableSizeAndSearchHeader",
-        props: [
-            'sizePerPageOptions'
-        ],
+        props: {
+            sizePerPageOptions: {
+                type: Array,
+                required: false,
+                default() {
+                    return [
+                        {value: 5, text: '5'},
+                        {value: 10, text: '10'},
+                        {value: 25, text: '25'},
+                        {value: 50, text: '50'},
+                    ]
+                }
+            },
+            searchPlaceholderText: {
+                type: String,
+                required: true
+            }
+        },
         data() {
             return {
                 sizePerPage: 5,

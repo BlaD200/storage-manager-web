@@ -9,7 +9,7 @@
             <hr>
 
             <tableHeader
-                    :size-per-page-options="sizePerPageOptions"
+                    :search-placeholder-text="`Name, username or email...`"
                     v-on:search-button-clicked="searchUsers"
                     v-on:on-size-per-page-changed="onSizePerPageChanged"
             />
@@ -60,7 +60,6 @@
                         aria-controls="users-table"
                         pills
                         v-model="currentPageNumber"
-                        value="number"
                 ></b-pagination>
             </div>
 
@@ -86,12 +85,6 @@
                 users: [],
                 totalElements: -1,
                 currentPageNumber: 1,
-                sizePerPageOptions: [
-                    {value: 5, text: '5'},
-                    {value: 10, text: '10'},
-                    {value: 25, text: '25'},
-                    {value: 50, text: '50'},
-                ],
                 sizePerPage: 5,
                 sortBy: '',
                 descending: false
@@ -239,7 +232,7 @@
                 this.getUsersPage(this.currentPageNumber - 1)
             },
             searchUsers(searchInput) {
-                console.log(searchInput)
+                // TODO show all after input cleared
                 this.getUsersPage(this.currentPageNumber - 1, searchInput)
             }
         },
