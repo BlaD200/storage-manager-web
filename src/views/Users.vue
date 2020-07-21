@@ -56,10 +56,10 @@
                         :per-page="sizePerPage"
                         :total-rows="totalElements"
                         @change="onPageChange"
+                        v-model="currentPageNumber"
                         align="center"
                         aria-controls="users-table"
                         pills
-                        v-model="currentPageNumber"
                 ></b-pagination>
             </div>
 
@@ -244,6 +244,7 @@
                 else if (this.sortBy)
                     return sortedUsers.sort(this.sortAscending)
                 return this.users;
+                // TODO sort users on server side
             }
         }
     }
